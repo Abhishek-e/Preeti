@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --text-color: #2c2c2c;
+            --accent-color: #d65a7a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #ffe6eb 0%, #f4e2fb 50%, #e2f0fb 100%);
+            background-attachment: fixed;
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background Gradient */
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.4) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(221, 160, 221, 0.4) 0%, transparent 40%);
+            z-index: -1;
+            animation: pulseBg 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* Floating Hearts */
+        .hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .heart {
+            position: absolute; bottom: -50px; width: 20px; height: 20px;
+            background: var(--accent-color);
+            clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+            opacity: 0; animation: floatUp 8s infinite ease-in;
+        }
+        .heart:nth-child(1) { left: 10%; animation-delay: 0s; transform: scale(0.6); }
+        .heart:nth-child(2) { left: 30%; animation-delay: 2s; transform: scale(1); }
+        .heart:nth-child(3) { left: 50%; animation-delay: 4s; transform: scale(0.8); }
+        .heart:nth-child(4) { left: 70%; animation-delay: 1s; transform: scale(1.2); }
+        .heart:nth-child(5) { left: 90%; animation-delay: 3s; transform: scale(0.7); }
+
+        @keyframes floatUp {
+            0% { bottom: -50px; opacity: 0; transform: translateX(0) scale(1) rotate(0deg); }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { bottom: 110vh; opacity: 0; transform: translateX(50px) scale(1.5) rotate(360deg); }
+        }
+
+        /* Glassmorphic UI */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 24px;
+        }
+
+        /* Hero Section */
+        header {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px; position: relative; z-index: 1;
+        }
+
+        .hero-content { padding: 40px 30px; max-width: 400px; animation: fadeInDown 1.5s ease-out; }
+        .hero-content h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 15px; color: var(--accent-color); }
+        .hero-content p { font-size: 1rem; color: #555; }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute; bottom: 40px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+            font-size: 0.8rem; color: #888; animation: bounce 2s infinite;
+        }
+        .scroll-indicator i { width: 2px; height: 30px; background: #888; display: block; }
+
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
+
+        /* Main Content */
+        main { padding: 20px; position: relative; z-index: 1; }
+        .section {
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 60px 0; opacity: 0; transform: translateY(60px); transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .section.appear { opacity: 1; transform: translateY(0); }
+
+        .card {
+            width: 100%; max-width: 420px; padding: 30px 25px; display: flex; flex-direction: column; align-items: center;
+            gap: 25px; text-align: center;
+        }
+
+        /* Image Styling */
+        .image-container {
+            width: 100%; height: 300px; border-radius: 16px; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; background: #eee;
+        }
+        .image-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+        .image-container:hover img { transform: scale(1.05); }
+
+        /* Placeholder text if image fails to load */
+        .image-container::after {
+            content: "Image loading..."; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #999; font-size: 0.9rem; z-index: 0;
+        }
+        .image-container img { position: relative; z-index: 1; }
+
+        /* Poem Text */
+        .poem-text { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #444; font-style: italic; line-height: 1.8; }
+
+        /* Audio Button */
+        .audio-btn {
+            position: fixed; bottom: 25px; right: 25px; width: 55px; height: 55px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100;
+            border: 1px solid var(--glass-border); background: var(--glass-bg);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease; animation: floatBtn 3s infinite alternate;
+        }
+        .audio-btn:hover { transform: scale(1.1); background: rgba(255, 255, 255, 0.4); }
+        .audio-btn svg { width: 24px; height: 24px; fill: var(--accent-color); transition: all 0.3s ease; }
+        .audio-btn.playing svg { animation: spin 4s linear infinite; }
+
+        @keyframes floatBtn { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 480px) {
+            .hero-content h1 { font-size: 2rem; }
+            .image-container { height: 250px; }
+            .poem-text { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hearts">
+        <div class="heart"></div><div class="heart"></div><div class="heart"></div><div class="heart"></div><div class="heart"></div>
+    </div>
+
+    <header>
+        <div class="glass hero-content">
+            <h1>For My Everything</h1>
+            <p>Scroll down, my love. A little journey awaits you...</p>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <i></i>
+        </div>
+    </header>
+
+    <main>
+        <!-- Section 1 -->
+        <section class="section">
+            <div class="glass card">
+                <div class="image-container">
+                    <!-- MAKE SURE YOUR IMAGE IS NAMED EXACTLY LIKE THIS -->
+                    <img src="photo1.jpg" alt="Beautiful girl by the river" onerror="this.style.display='none'">
+                </div>
+                <div class="poem-text">
+                    "In the calm of the waters, I found you,<br>
+                    A gentle peace, a love so true.<br>
+                    Like the river's flow, my heart does race,<br>
+                    To see the smile upon your face."
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="section">
+            <div class="glass card">
+                <div class="image-container">
+                    <img src="photo2.jpg" alt="Beautiful girl in the forest" onerror="this.style.display='none'">
+                </div>
+                <div class="poem-text">
+                    "Under the sun's warm, golden rays,<br>
+                    You brighten my world in countless ways.<br>
+                    In the forest of my dreams, you stand,<br>
+                    The greatest treasure in all the land."
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section class="section">
+            <div class="glass card">
+                <div class="image-container">
+                    <img src="photo3.jpg" alt="Beautiful girl in traditional dress" onerror="this.style.display='none'">
+                </div>
+                <div class="poem-text">
+                    "And when the night is lit with green,<br>
+                    The most beautiful thing I've ever seen.<br>
+                    Through every season, every light,<br>
+                    You are my day, you are my night."
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Section -->
+        <section class="section">
+            <div class="glass card" style="text-align: center;">
+                <h2 style="font-family: 'Playfair Display', serif; color: var(--accent-color); font-size: 2rem; margin-bottom: 10px;">I Love You</h2>
+                <p style="color: #555; font-size: 0.95rem;">Forever and always.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Audio Element (Online link) -->
+    <audio id="bgMusic" loop>
+        <source src="https://ia800304.us.archive.org/25/items/VivaldiTheFourSeasonsComplete/Vivaldi%20-%20The%20Four%20Seasons%20-%20Winter%20mvt%202%20Largo.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Audio Control Button -->
+    <div class="audio-btn" id="audioBtn">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+    </div>
+
+    <script>
+        // Scroll Reveal Animation
+        const sections = document.querySelectorAll('.section');
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.2 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { entry.target.classList.add('appear'); }
+            });
+        }, observerOptions);
+        sections.forEach(section => { observer.observe(section); });
+
+        // Audio Autoplay Logic
+        const audioBtn = document.getElementById('audioBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        const playAudio = () => {
+            if (!isPlaying) {
+                bgMusic.volume = 0.5;
+                bgMusic.play().then(() => {
+                    isPlaying = true;
+                    audioBtn.classList.add('playing');
+                }).catch(error => { console.log("Autoplay blocked.", error); });
+            }
+            document.removeEventListener('click', playAudio);
+            document.removeEventListener('scroll', playAudio);
+            document.removeEventListener('touchstart', playAudio);
+        };
+
+        document.addEventListener('click', playAudio);
+        document.addEventListener('scroll', playAudio);
+        document.addEventListener('touchstart', playAudio);
+
+        // Manual Toggle
+        audioBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isPlaying) {
+                bgMusic.pause(); isPlaying = false; audioBtn.classList.remove('playing');
+            } else {
+                bgMusic.volume = 0.5; bgMusic.play(); isPlaying = true; audioBtn.classList.add('playing');
+            }
+        });
+    </script>
+</body>
+</html>
